@@ -1,0 +1,24 @@
+services:
+  waha:
+    image: devlikeapro/waha:latest
+    profiles: [waha]
+    restart: unless-stopped
+    expose:
+      - "3000"
+    environment:
+      WAHA_API_KEY: ${WAHA_API_KEY:?WAHA_API_KEY is required}
+      WAHA_API_KEY_EXCLUDE_PATH: health,ping
+      WHATSAPP_API_KEY_EXCLUDE_PATH: health,ping
+      WHATSAPP_DEFAULT_ENGINE: ${WAHA_DEFAULT_ENGINE:-GOWS}
+      WAHA_LOG_LEVEL: ${WAHA_LOG_LEVEL:-info}
+    volumes:
+      - waha_sessions:/app/.sessions
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/health', { headers: { 'X-Api-Key': process.env.WAHA_API_KEY } }).then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+volumes:
+  waha_sessions:
