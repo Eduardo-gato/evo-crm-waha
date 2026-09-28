@@ -1,0 +1,20 @@
+# Override para usar as imagens publicadas no Docker Hub em vez de buildar o
+# CRM e o frontend localmente.
+#
+# Uso (a partir da raiz do repositorio, onde esta o docker-compose.yml):
+#   docker compose -f docker-compose.yml -f docker-compose.hub.yml pull evo-crm evo-crm-sidekiq evo-frontend
+#   docker compose -f docker-compose.yml -f docker-compose.hub.yml up -d --no-build
+#
+# As demais imagens (evo-auth, evo-auth-sidekiq, evo-processor, evo-bot-runtime,
+# evo-flow) ainda sao buildadas do fonte por nao estarem publicadas.
+#
+# Para atualizar a versao, troque a tag abaixo (ex.: :1.0 -> :1.1).
+services:
+  evo-crm:
+    image: edwardbra/evo-ai-crm-community-waha:1.0
+
+  evo-crm-sidekiq:
+    image: edwardbra/evo-ai-crm-community-waha:1.0
+
+  evo-frontend:
+    image: edwardbra/evo-ai-frontend-community-waha:1.0
